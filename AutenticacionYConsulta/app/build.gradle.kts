@@ -82,6 +82,10 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-simplexml:2.9.0")
     implementation("org.simpleframework:simple-xml:2.7.1")
 
+    implementation("com.google.code.gson:gson:2.8.8")
+
+    implementation("androidx.navigation:navigation-compose:2.4.0-beta01")
+
     /*
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-simplexml:2.9.0")

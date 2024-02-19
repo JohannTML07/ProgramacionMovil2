@@ -15,8 +15,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.evaluacion1.SicenetApp
 import com.example.evaluacion1.data.SiceRepositotory
+import com.example.evaluacion1.model.Estudiante
 import com.example.evaluacion1.model.Respuesta
+import com.example.evaluacion1.model.Usuario
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpException
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
@@ -37,11 +40,16 @@ class ViewModelLogin(private val repository: SiceRepositotory): ViewModel() {
         private set
     var Password by mutableStateOf("")
         private set
+    var Estado by mutableStateOf(LoginState())
+        private set
     fun updateUsuario(usuario: String){
         Usuario = usuario
     }
     fun updatePasword(pasword: String){
         Password = pasword
+    }
+    fun updateU(estado: LoginState){
+        Estado = estado
     }
 
     //Llamada a la conexion
@@ -51,7 +59,18 @@ class ViewModelLogin(private val repository: SiceRepositotory): ViewModel() {
 
 
     fun Authentication(/*n: String, m: String*/) {
+        GlobalScope.launch {
+            try {
+                updateU(Estado.copy(usuario = repository.Acceso(Usuario, Password)))
+                if (Estado.usuario.acceso){
+                    updateU(Estado.copy(estudiante = repository.infoMatricula()))
+                }
+            }
+            catch (e: Exception){
+                Log.d("Error","Error en la autenticación")
+            }
 
+        }
     }
 
     companion object{
@@ -67,3 +86,24 @@ class ViewModelLogin(private val repository: SiceRepositotory): ViewModel() {
         }
     }
 }
+
+data class LoginState(
+    val usuario: Usuario = Usuario(false, "", 0, "", ""),
+    val estudiante: Estudiante = Estudiante(
+        fechaReins = "",
+        modEducativo = 0,
+        adeudo = false,
+        urlFoto = "",
+        adeudoDescripcion = "",
+        inscrito = false,
+        estatus = "",
+        semActual = 0,
+        cdtosAcumulados = 0,
+        cdtosActuales = 0,
+        especialidad = "",
+        carrera = "",
+        lineamiento = 0,
+        nombre = "",
+        matricula = ""
+    )
+)

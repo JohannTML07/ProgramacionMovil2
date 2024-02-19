@@ -11,14 +11,17 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface SiceApi{
+
+    //interfaz para conectar a webservice
     @Headers("Content-Type: application/xml")
     @GET("Usuario")
     fun getUser(): String
 
     @POST("/ws/wsalumnos.asmx")
     @Headers("Content-Type: text/xml")
-    suspend fun Login(@Body cuerpo: RequestBody): Call<ResponseBody>
+    suspend fun Login(@Body cuerpo: RequestBody): ResponseBody
 
     @GET("/ws/wsalumnos.asmx")
-    suspend fun getCookies(): Call<ResponseBody>
+    suspend fun getCookies(): ResponseBody
+
 }

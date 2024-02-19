@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
 interface AppConteiner{
     val siceRepositotory:SiceRepositotory
@@ -15,7 +16,7 @@ class DefaultAppContainer:AppConteiner{
     private val cookies : CookiesInterceptor = CookiesInterceptor()
     private val ok : OkHttpClient = OkHttpClient.Builder().addInterceptor(cookies).build()
     private val retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(SimpleXmlConverterFactory.create())
         .baseUrl(baseUrl)
         .client(ok)
         .build()
